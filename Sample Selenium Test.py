@@ -1,11 +1,49 @@
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 
-driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
-driver.get("https://www.google.com")
+from selenium.webdriver.chrome.service import Service as ChromeService
 
-print("First Line of Text\n")
+import re
 
-driver.close()
-EndMessage = input("End of Data\n")
+# Main GODS Unchained URL: https://tokentrove.com/collection/GodsUnchainedCards
+
+chrome_options = Options()
+chrome_options.headless = False
+
+driver = webdriver.Chrome(service=ChromeService(
+    executable_path=ChromeDriverManager().install()),options=chrome_options)
+driver.implicitly_wait(10)
+
+driver.get("https://tokentrove.com/collection/GodsUnchainedCards")
+
+search_bar = driver.find_element(by=By.CSS_SELECTOR, value="input[type='text']")
+search_bar.send_keys("Zealous March")
+
+driver.implicitly_wait(5)
+listing_information = driver.find_elements(by=By.CLASS_NAME, value="listing-info")
+
+print("Card Name: Zealous March\n")
+count = 0
+for item in listing_information:
+    listing_price = item.find_element(by=By.CLASS_NAME, value="listing-price-container")
+    eth_price = item.find_element(by=By.CLASS_NAME, value="listing-price-primary")
+    dollar_price = item.find_element(by=By.CLASS_NAME, value="listing-price-secondary")
+    match count:
+        case 0:
+            print("M Price: " + dollar_price.text)
+        case 1:
+            print("S Price: " + dollar_price.text)
+        case 2:
+            print("G Price: " + dollar_price.text)
+        case 3:
+            print("D Price: " + dollar_price.text)
+        case _:
+            print("There was a problem fetching card prices")
+    count += 1
+
+print("\nEnd of Data")
