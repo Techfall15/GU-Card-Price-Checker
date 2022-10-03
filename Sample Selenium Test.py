@@ -25,25 +25,37 @@ search_bar = driver.find_element(by=By.CSS_SELECTOR, value="input[type='text']")
 search_bar.send_keys("Zealous March")
 
 driver.implicitly_wait(5)
-listing_information = driver.find_elements(by=By.CLASS_NAME, value="listing-info")
+listing_information = driver.find_elements(By.CLASS_NAME, "listing-info")
 
 print("Card Name: Zealous March\n")
 count = 0
+card_URLS = []
 for item in listing_information:
-    listing_price = item.find_element(by=By.CLASS_NAME, value="listing-price-container")
-    eth_price = item.find_element(by=By.CLASS_NAME, value="listing-price-primary")
-    dollar_price = item.find_element(by=By.CLASS_NAME, value="listing-price-secondary")
-    match count:
-        case 0:
-            print("M Price: " + dollar_price.text)
-        case 1:
-            print("S Price: " + dollar_price.text)
-        case 2:
-            print("G Price: " + dollar_price.text)
-        case 3:
-            print("D Price: " + dollar_price.text)
-        case _:
-            print("There was a problem fetching card prices")
-    count += 1
+    item.click()
+    card_URLS.append(driver.current_url)
+    w = WebDriverWait(driver, 3.0)
+    meta_data = w.until(EC.presence_of_element_located((By.CLASS_NAME, "order-details-metadata")))
+    print(meta_data.text)
+    driver.implicitly_wait(10)
+    driver.back()
+    driver.implicitly_wait(10)
+
+
+#for item in listing_information:
+#    listing_price = item.find_element(by=By.CLASS_NAME, value="listing-price-container")
+#    eth_price = item.find_element(by=By.CLASS_NAME, value="listing-price-primary")
+#    dollar_price = item.find_element(by=By.CLASS_NAME, value="listing-price-secondary")
+#    match count:
+#        case 0:
+#            print("M Price: " + dollar_price.text)
+#        case 1:
+#            print("S Price: " + dollar_price.text)
+#        case 2:
+#            print("G Price: " + dollar_price.text)
+#        case 3:
+#            print("D Price: " + dollar_price.text)
+#        case _:
+#            print("There was a problem fetching card prices")
+#    count += 1
 
 print("\nEnd of Data")
