@@ -5,4 +5,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 driver.get("https://www.google.com")
 
-EndMessage = input("End of Data")
+print("First Line of Text\n")
+
+driver.close()
+EndMessage = input("End of Data\n")
