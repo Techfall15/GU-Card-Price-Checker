@@ -22,12 +22,13 @@ driver.implicitly_wait(20)
 driver.get("https://tokentrove.com/collection/GodsUnchainedCards")
 
 search_bar = driver.find_element(by=By.CSS_SELECTOR, value="input[type='text']")
-search_bar.send_keys("Zealous March")
+cardToSearch = "Inquisitor Informant"
+search_bar.send_keys(cardToSearch)
 
 
 listing_information = driver.find_elements(By.CLASS_NAME, "listing-info")
 
-print("Card Name: Zealous March\n")
+print("Card Name: Inquisitor Informant\n")
 count = 0
 card_URLS = []
 for item in listing_information:
