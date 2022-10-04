@@ -22,15 +22,22 @@ driver.implicitly_wait(20)
 driver.get("https://tokentrove.com/collection/GodsUnchainedCards")
 
 search_bar = driver.find_element(by=By.CSS_SELECTOR, value="input[type='text']")
-cardToSearch = "Inquisitor Informant"
+cardToSearch = "Wrong Path"
+#cardToSearch = input("Enter Card Name: ")
 search_bar.send_keys(cardToSearch)
 
 
 listing_information = driver.find_elements(By.CLASS_NAME, "listing-info")
 
-print("Card Name: Inquisitor Informant\n")
+print("\nCard Name: {0}\n".format(cardToSearch))
 count = 0
 card_URLS = []
+card_strings = [
+    "{0:<15} {1:>12}".format("Meteorite", "$-.--"),
+    "{0:<15} {1:>12}".format("Shadow", "$-.--"),
+    "{0:<15} {1:>12}".format("Gold", "$-.--"),
+    "{0:<15} {1:>12}".format("Diamond", "$-.--"),
+]
 for item in listing_information:
     item.click()
     card_URLS.append(driver.current_url)
@@ -40,10 +47,23 @@ for item in listing_information:
     card_quality = meta_data_rows[2].find_element(By.CLASS_NAME, "order-details-value")
     price_table = w.until(EC.presence_of_element_located((By.CLASS_NAME, "ReactTable")))
     price_row = w.until(EC.presence_of_element_located((By.CLASS_NAME, "secondary-price-row")))
-    print(card_quality.text + "  " + price_row.text)
+    match card_quality.text:
+        case "Meteorite":
+            card_strings[0] = "{0:<15} {1:>12}".format(card_quality.text, price_row.text)
+        case "Shadow":
+            card_strings[1] = "{0:<15} {1:>12}".format(card_quality.text, price_row.text)
+        case "Gold":
+            card_strings[2] = "{0:<15} {1:>12}".format(card_quality.text, price_row.text)
+        case "Diamond":
+            card_strings[3] = "{0:<15} {1:>12}".format(card_quality.text, price_row.text)
+        case _:
+            print("Error Finding Card Data")
+    
     driver.back()
     time.sleep(0.6)
-    
+
+for string in card_strings:
+    print(string)
     
     
 
