@@ -7,7 +7,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 
 from selenium.webdriver.chrome.service import Service as ChromeService
-
+import time
 import re
 
 # Main GODS Unchained URL: https://tokentrove.com/collection/GodsUnchainedCards
@@ -17,14 +17,14 @@ chrome_options.headless = False
 
 driver = webdriver.Chrome(service=ChromeService(
     executable_path=ChromeDriverManager().install()),options=chrome_options)
-driver.implicitly_wait(10)
+driver.implicitly_wait(20)
 
 driver.get("https://tokentrove.com/collection/GodsUnchainedCards")
 
 search_bar = driver.find_element(by=By.CSS_SELECTOR, value="input[type='text']")
 search_bar.send_keys("Zealous March")
 
-driver.implicitly_wait(5)
+
 listing_information = driver.find_elements(By.CLASS_NAME, "listing-info")
 
 print("Card Name: Zealous March\n")
@@ -33,12 +33,18 @@ card_URLS = []
 for item in listing_information:
     item.click()
     card_URLS.append(driver.current_url)
-    w = WebDriverWait(driver, 3.0)
+    w = WebDriverWait(driver, 10.0)
     meta_data = w.until(EC.presence_of_element_located((By.CLASS_NAME, "order-details-metadata")))
-    print(meta_data.text)
-    driver.implicitly_wait(10)
+    meta_data_rows = meta_data.find_elements(By.CLASS_NAME, "order-details-row")
+    card_quality = meta_data_rows[2].find_element(By.CLASS_NAME, "order-details-value")
+    price_table = w.until(EC.presence_of_element_located((By.CLASS_NAME, "ReactTable")))
+    price_row = w.until(EC.presence_of_element_located((By.CLASS_NAME, "secondary-price-row")))
+    print(card_quality.text + "  " + price_row.text)
     driver.back()
-    driver.implicitly_wait(10)
+    time.sleep(0.6)
+    
+    
+    
 
 
 #for item in listing_information:
