@@ -22,7 +22,7 @@ driver.implicitly_wait(20)
 driver.get("https://tokentrove.com/collection/GodsUnchainedCards")
 
 search_bar = driver.find_element(by=By.CSS_SELECTOR, value="input[type='text']")
-cardToSearch = "Wrong Path"
+cardToSearch = "Humble Benefactor"
 #cardToSearch = input("Enter Card Name: ")
 search_bar.send_keys(cardToSearch)
 
