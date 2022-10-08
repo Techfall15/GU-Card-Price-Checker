@@ -10,7 +10,7 @@ from selenium.webdriver.chrome.service import Service as ChromeService
 import time
 import re
 
-# Main GODS Unchained URL: https://tokentrove.com/collection/GodsUnchainedCards
+# Main GODS Unchained URL: https://toke`ntrove.com/collection/GodsUnchainedCards
 
 chrome_options = Options()
 chrome_options.headless = False
@@ -26,8 +26,9 @@ cardToSearch = "Humble Benefactor"
 #cardToSearch = input("Enter Card Name: ")
 search_bar.send_keys(cardToSearch)
 
+w = WebDriverWait(driver, 10.0)
 
-listing_information = driver.find_elements(By.CLASS_NAME, "listing-info")
+listing_information = w.until(EC.presence_of_all_elements_located((By.CLASS_NAME, "listing-info")))
 
 print("\nCard Name: {0}\n".format(cardToSearch))
 count = 0
@@ -46,7 +47,7 @@ for item in listing_information:
     meta_data_rows = meta_data.find_elements(By.CLASS_NAME, "order-details-row")
     card_quality = meta_data_rows[2].find_element(By.CLASS_NAME, "order-details-value")
     price_table = w.until(EC.presence_of_element_located((By.CLASS_NAME, "ReactTable")))
-    price_row = w.until(EC.presence_of_element_located((By.CLASS_NAME, "secondary-price-row")))
+    price_row = w.until(EC.presence_of_element_located((By.CLASS_NAME, "secondary-price-col")))
     match card_quality.text:
         case "Meteorite":
             card_strings[0] = "{0:<15} {1:>12}".format(card_quality.text, price_row.text)
